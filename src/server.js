@@ -29,6 +29,7 @@ import models from './data/models';
 import schema from './data/schema';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
+import twitterAPI from './api/twitter';
 
 const app = express();
 
@@ -46,6 +47,11 @@ app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+//
+// Register twitter API middleware
+// -----------------------------------------------------------------------------
+app.use('/api/twitter', twitterAPI);
 
 //
 // Authentication

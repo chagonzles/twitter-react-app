@@ -4,6 +4,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Header.css';
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem, Button} from 'react-bootstrap';
 import AppConstants from '../../constants/AppConstants';
+import Session from '../../core/Session';
 
 class Header extends React.Component {
 
@@ -27,8 +28,18 @@ class Header extends React.Component {
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
+            { Session.getAccessToken() && Session.getAccessTokenSecret() &&
+                <Nav>
+                  <NavItem>Home</NavItem>
+                  <NavItem>Profile</NavItem>
+                </Nav>
+            }
             <Navbar.Form pullRight>
-              <Button bsStyle="success" className={s.signInButton} onClick={this._signInTwitter}>Sign in With Twitter</Button>
+              { Session.getAccessToken() && Session.getAccessTokenSecret() ?
+                  <Button bsStyle="success" className={s.signInButton} onClick={this._signInTwitter}>Sign in Another Account</Button>
+                  :
+                  <Button bsStyle="success" className={s.signInButton} onClick={this._signInTwitter}>Sign in With Twitter</Button>
+              }
             </Navbar.Form>
           </Navbar.Collapse>
         </Navbar>

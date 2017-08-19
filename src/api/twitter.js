@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import http from 'superagent';
 import Twit from 'twit';
 import AppConstants from '../constants/AppConstants';
 
@@ -22,5 +21,15 @@ router.get('/', (req, res) => {
 	    res.send({response: result.data});
 	  })
 });
+
+router.get('/tweets', (req, res) => {
+	console.log('request text ', req.query);
+	T.get('search/tweets', { q: req.query.q, count: 10 }, function(err, data, response) {
+	  console.log(data)
+	  res.send({response: data})
+	})
+
+});
+
 
 export default router

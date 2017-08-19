@@ -1,10 +1,21 @@
 import React from 'react';
+import request from 'superagent';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Header.css';
-
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem, Button} from 'react-bootstrap';
+import AppConstants from '../../constants/AppConstants';
 
 class Header extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this._signInTwitter = this._signInTwitter.bind(this);
+  }
+
+  _signInTwitter() {
+    window.location.assign(AppConstants.WEB_APP_URL + "/api/twitter/request-token");
+  }
+
   render() {
     return (
       <div className={s.root}>
@@ -16,20 +27,9 @@ class Header extends React.Component {
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
-            <Nav>
-              {/**<NavItem eventKey={1} href="#">Link</NavItem>
-                            <NavItem eventKey={2} href="#">Link</NavItem>
-                            <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                              <MenuItem eventKey={3.1}>Action</MenuItem>
-                              <MenuItem eventKey={3.2}>Another action</MenuItem>
-                              <MenuItem eventKey={3.3}>Something else here</MenuItem>
-                              <MenuItem divider />
-                              <MenuItem eventKey={3.3}>Separated link</MenuItem>
-                            </NavDropdown>**/}
-            </Nav>
-            <Nav pullRight>
-              <Button bsStyle="success" className={s.signInButton}>Sign in With Twitter</Button>
-            </Nav>
+            <Navbar.Form pullRight>
+              <Button bsStyle="success" className={s.signInButton} onClick={this._signInTwitter}>Sign in With Twitter</Button>
+            </Navbar.Form>
           </Navbar.Collapse>
         </Navbar>
       </div>

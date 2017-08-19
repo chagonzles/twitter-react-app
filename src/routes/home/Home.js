@@ -41,6 +41,7 @@ class Home extends React.Component {
     var e = e ? e.preventDefault() : '';  
     console.log('get tweets!', this.state.searchTweetText);
     var self = this;
+    
     request.get('api/twitter/tweets')
            .query({q: this.state.searchTweetText})
            .end(function(err,res){
@@ -48,7 +49,7 @@ class Home extends React.Component {
                 var tweets = res.body.response.statuses;
                 var tweetDiv = [];
                 tweets.forEach((tweet,index)=>(
-                    tweetDiv.push(<Tweet data={tweet} />)
+                    tweetDiv.push(<Tweet data={tweet} key={index}/>)
                 ))
                 self.setState({tweetDiv: tweetDiv});
                 console.log('tweets ', tweetDiv);
@@ -57,7 +58,11 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this._getTweets(); 
+    this._getTweets();
+    // var self = this;
+    // setInterval(function() {
+    //   self._getTweets(); 
+    // }, 10000);    
   }
 
   render() {

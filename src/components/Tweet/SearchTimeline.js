@@ -15,8 +15,9 @@ import s from './Tweet.css';
 import AppConstants from '../../constants/AppConstants';
 import request from 'superagent';
 import Tweet from 'react-tweet'
-import {Row,Col,FormGroup,FormControl,ControlLabel,Button,Glyphicon} from 'react-bootstrap';
+import {Row,Col,FormGroup,FormControl,ControlLabel,Button,Glyphicon,Image} from 'react-bootstrap';
 import Session from '../../core/Session';
+import spinner from './spinner.gif';
 
 class SearchTimeline extends React.Component {
   static propTypes = {
@@ -27,14 +28,23 @@ class SearchTimeline extends React.Component {
     super(props);
     this.state = {
       tweets: [],
-      tweetDiv: null
+      tweetDiv: null,
+      showHomeTimeline: false,
+      searchTweetText: 'ReactJS'
     }
+    this._onSearchTweetTextChange = this._onSearchTweetTextChange.bind(this);
   }
 
-  _getTweets() {
+  _onSearchTweetTextChange(e) {
+      var text = e.target.value;
+      this.setState({searchTweetText: text});
+  }
+
+  _getTweets(e) {
+    var e = e ? e.preventDefault() : ''; 
     var self = this;
     request.get('api/twitter/tweets')
-           .query({q: this.props.query, accessToken: Session.getAccessToken(), accessTokenSecret: Session.getAccessTokenSecret()})
+           .query({q: this.state.searchTweetText, accessToken: Session.getAccessToken(), accessTokenSecret: Session.getAccessTokenSecret()})
            .end(function(err,res){
               if(res) {
                 var tweets = res.body.response.statuses;
@@ -60,7 +70,30 @@ class SearchTimeline extends React.Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          {this.state.tweetDiv}
+          <form onSubmit={this._getTweets.bind(this)}>
+                      <FormGroup controlId="formControlsTextarea">
+                        <Row>
+                          <Col sm={10}>
+                            <ControlLabel>Search for Tweets</ControlLabel>
+                            <FormControl placeholder="Search for.." onChange={this._onSearchTweetTextChange} value={this.state.searchTweetText}/>
+                          </Col>
+                          <Col sm={2}>
+                            <Button bsStyle="primary" type="submit" className={s.searchButton} disabled={!this.state.searchTweetText} block>
+                              <Glyphicon glyph="search"/> <span>Search</span>
+                            </Button>
+                          </Col>
+                        </Row>
+                      </FormGroup>
+          </form>
+          {this.state.tweetDiv ?
+            this.state.tweetDiv
+            :
+            <Row>
+              <Col sm={4} smOffset={4}>
+                <Image src={spinner} className={s.spinner}/>
+              </Col>
+            </Row>
+          }
         </div>
       </div>
     );

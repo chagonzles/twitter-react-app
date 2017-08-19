@@ -68,28 +68,9 @@ class Home extends React.Component {
          { this.state.showHomeTimeline ?
            <HomeTimeline />
            :
-           <form onSubmit={this._getSearchTweets.bind(this)}>
-                      <FormGroup controlId="formControlsTextarea">
-                        <Row>
-                          <Col sm={10}>
-                            <ControlLabel>Search for Tweets</ControlLabel>
-                            <FormControl placeholder="Search for.." onChange={this._onSeachTweetTextChange} value={this.state.searchTweetText}/>
-                          </Col>
-                          <Col sm={2}>
-                            <Button bsStyle="primary" type="submit" className={s.searchButton} disabled={!this.state.searchTweetText} block>
-                              <Glyphicon glyph="search"/> <span>Search</span>
-                            </Button>
-                          </Col>
-                        </Row>
-                      </FormGroup>
-            </form>
+          this.state.searchTimelineDiv       
          }
          
-        { !this.state.showHomeTimeline &&
-          this.state.searchTimelineDiv
-        }
-         
-
         </div>
       </div>
     );

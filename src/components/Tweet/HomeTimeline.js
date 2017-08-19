@@ -15,8 +15,9 @@ import s from './Tweet.css';
 import AppConstants from '../../constants/AppConstants';
 import request from 'superagent';
 import Tweet from 'react-tweet'
-import {Row,Col,FormGroup,FormControl,ControlLabel,Button,Glyphicon} from 'react-bootstrap';
+import {Row,Col,FormGroup,FormControl,ControlLabel,Button,Glyphicon,Image} from 'react-bootstrap';
 import Session from '../../core/Session';
+import spinner from './spinner.gif';
 
 class HomeTimeline extends React.Component {
   static propTypes = {
@@ -59,7 +60,15 @@ class HomeTimeline extends React.Component {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          {this.state.tweetDiv}
+          {this.state.tweetDiv ?
+            this.state.tweetDiv
+            :
+            <Row>
+              <Col sm={4} smOffset={4}>
+                <Image src={spinner} className={s.spinner}/>
+              </Col>
+            </Row>
+          }
         </div>
       </div>
     );

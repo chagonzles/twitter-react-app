@@ -3,5 +3,6 @@ export default {
 	CONSUMER_SECRET: 'Jr40QpWplpqXldKRTGbSJaWFrXIx7NAn7wWHQU6a9dZEYSjGgr',
 	ACCESS_TOKEN: '897830750296326144-hrJGa2XmAwJGdCrfScuuHbrxpNVTFT4',
 	ACCESS_TOKEN_SECRET: 'wLU2LWuBJh9tPqx2JKoO7RSMGrX04fg3rLYnhkh3ad31e',
-	WEB_APP_URL: 'http://localhost:3000'
+	WEB_APP_URL: 'http://localhost:3000',
+	API_URL: 'http://localhost:3000/api/twitter'
 }

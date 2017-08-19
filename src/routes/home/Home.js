@@ -16,6 +16,7 @@ import AppConstants from '../../constants/AppConstants';
 import request from 'superagent';
 import Tweet from 'react-tweet'
 import {Row,Col,FormGroup,FormControl,ControlLabel,Button,Glyphicon} from 'react-bootstrap';
+import Session from '../../core/Session';
 
 class Home extends React.Component {
   static propTypes = {
@@ -43,7 +44,7 @@ class Home extends React.Component {
     var self = this;
     
     request.get('api/twitter/tweets')
-           .query({q: this.state.searchTweetText})
+           .query({q: this.state.searchTweetText, accessToken: Session.getAccessToken(), accessTokenSecret: Session.getAccessTokenSecret()})
            .end(function(err,res){
               if(res) {
                 var tweets = res.body.response.statuses;

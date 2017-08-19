@@ -17,6 +17,8 @@ import request from 'superagent';
 import Tweet from 'react-tweet'
 import {Row,Col,FormGroup,FormControl,ControlLabel,Button,Glyphicon} from 'react-bootstrap';
 import Session from '../../core/Session';
+import HomeTimeline from '../../components/Tweet/HomeTimeline';
+import SearchTimeline from '../../components/Tweet/SearchTimeline';
 
 class Home extends React.Component {
   static propTypes = {
@@ -28,7 +30,9 @@ class Home extends React.Component {
     this.state = {
       tweets: [],
       tweetDiv: null,
-      searchTweetText: 'Game of Thrones'
+      searchTweetText: 'ReactJS',
+      searchTimelineDiv: null,
+      showHomeTimeline: false
     }
     this._onSeachTweetTextChange = this._onSeachTweetTextChange.bind(this);
   }
@@ -38,54 +42,54 @@ class Home extends React.Component {
       this.setState({searchTweetText: text});
   }
 
-  _getTweets(e) {
+  _getSearchTweets(e) {
     var e = e ? e.preventDefault() : '';  
-    console.log('get tweets!', this.state.searchTweetText);
-    var self = this;
-    
-    request.get('api/twitter/tweets')
-           .query({q: this.state.searchTweetText, accessToken: Session.getAccessToken(), accessTokenSecret: Session.getAccessTokenSecret()})
-           .end(function(err,res){
-              if(res) {
-                var tweets = res.body.response.statuses;
-                var tweetDiv = [];
-                tweets.forEach((tweet,index)=>(
-                    tweetDiv.push(<Tweet data={tweet} key={index}/>)
-                ))
-                self.setState({tweetDiv: tweetDiv});
-                console.log('tweets ', tweetDiv);
-              }
-    });
+    var tweetDiv = [];
+    tweetDiv.push(<SearchTimeline query={this.state.searchTweetText} key={0}/>);
+    this.setState({searchTimelineDiv: tweetDiv});
   }
 
   componentDidMount() {
-    this._getTweets();
-    // var self = this;
-    // setInterval(function() {
-    //   self._getTweets(); 
-    // }, 10000);    
+    if(Session.getAccessToken() && Session.getAccessTokenSecret()) {
+      this.setState({showHomeTimeline: true});
+    } else {
+      this.setState({showHomeTimeline: false});
+      var tweetDiv = [];
+      tweetDiv.push(<SearchTimeline query={this.state.searchTweetText} key={0}/>);
+      this.setState({searchTimelineDiv: tweetDiv});   
+    }  
   }
 
   render() {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <form onSubmit={this._getTweets.bind(this)}>
-            <FormGroup controlId="formControlsTextarea">
-              <Row>
-                <Col sm={10}>
-                  <ControlLabel>Search for Tweets</ControlLabel>
-                  <FormControl placeholder="Search for.." onChange={this._onSeachTweetTextChange} value={this.state.searchTweetText}/>
-                </Col>
-                <Col sm={2}>
-                  <Button bsStyle="primary" type="submit" className={s.searchButton} disabled={!this.state.searchTweetText} block>
-                    <Glyphicon glyph="search"/> <span>Search</span>
-                  </Button>
-                </Col>
-              </Row>
-            </FormGroup>
-          </form>
-          {this.state.tweetDiv}
+
+         { this.state.showHomeTimeline ?
+           <HomeTimeline />
+           :
+           <form onSubmit={this._getSearchTweets.bind(this)}>
+                      <FormGroup controlId="formControlsTextarea">
+                        <Row>
+                          <Col sm={10}>
+                            <ControlLabel>Search for Tweets</ControlLabel>
+                            <FormControl placeholder="Search for.." onChange={this._onSeachTweetTextChange} value={this.state.searchTweetText}/>
+                          </Col>
+                          <Col sm={2}>
+                            <Button bsStyle="primary" type="submit" className={s.searchButton} disabled={!this.state.searchTweetText} block>
+                              <Glyphicon glyph="search"/> <span>Search</span>
+                            </Button>
+                          </Col>
+                        </Row>
+                      </FormGroup>
+            </form>
+         }
+         
+        { !this.state.showHomeTimeline &&
+          this.state.searchTimelineDiv
+        }
+         
+
         </div>
       </div>
     );

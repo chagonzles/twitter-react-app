@@ -2,11 +2,13 @@ import { Router } from 'express';
 import Twit from 'twit';
 import Twitter from 'node-twitter-api';
 import AppConstants from '../constants/AppConstants';
-import Session from '../core/Session';
 
 const router = new Router();
 
-//APIS for Authentication
+//=========================================
+//TWITTER OAuth APIs
+//=========================================
+//Config for Twitter OAuth
 var twitter = new Twitter({
 	        consumerKey: AppConstants.CONSUMER_KEY,
 	    	consumerSecret: AppConstants.CONSUMER_SECRET,
@@ -14,6 +16,9 @@ var twitter = new Twitter({
 	    });
 var _requestSecret;
 
+//-----------------------------------------
+// GET request_token
+//-----------------------------------------
 router.get("/request-token", function(req, res) {
         twitter.getRequestToken(function(err, requestToken, requestSecret) {
             if (err)
@@ -25,9 +30,11 @@ router.get("/request-token", function(req, res) {
         });
  });
 
+//-----------------------------------------
+// GET access_token
+//-----------------------------------------
 router.get("/access-token", function(req, res) {
         var requestToken = req.query.oauth_token,verifier = req.query.oauth_verifier;
-
         twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret) {
             if (err)
                 res.status(500).send(err);
@@ -42,44 +49,47 @@ router.get("/access-token", function(req, res) {
         });
 });
 
-
-//APIs for getting Tweets
+//=========================================
+//TWITTER REST APIS
+//=========================================
+//Config for Twitter REST APIs
 var T = new Twit({
-  consumer_key:         AppConstants.CONSUMER_KEY,
-  consumer_secret:      AppConstants.CONSUMER_SECRET,
-  access_token:         AppConstants.ACCESS_TOKEN,
-  access_token_secret:  AppConstants.ACCESS_TOKEN_SECRET,
-  timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
+	  consumer_key:         AppConstants.CONSUMER_KEY,
+	  consumer_secret:      AppConstants.CONSUMER_SECRET,
+	  access_token:         AppConstants.ACCESS_TOKEN,
+	  access_token_secret:  AppConstants.ACCESS_TOKEN_SECRET,
+	  timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 })
 
-
-console.log('twit config ', T);
-router.get('/', (req, res) => {
-	T.get('account/verify_credentials', { skip_status: true })
-	  .catch(function (err) {
-	   	res.send('caught error', err.stack)
-	  })
-	  .then(function (result) {
-	  	console.log('result ',result);
-	    res.redirect(AppConstants.WEB_APP_URL + '/auth');
-	  })
-});
-
+//-----------------------------------------
+// GET search/tweets
+//-----------------------------------------
 router.get('/tweets', (req, res) => {
 	var userAccessToken = req.query.accessToken;
 	var userAccessTokenSecret = req.query.accessTokenSecret;
-	var T = new Twit({
-	  consumer_key:         AppConstants.CONSUMER_KEY,
-	  consumer_secret:      AppConstants.CONSUMER_SECRET,
-	  access_token:         userAccessToken ? userAccessToken : AppConstants.ACCESS_TOKEN,
-	  access_token_secret:  userAccessTokenSecret ? userAccessTokenSecret : AppConstants.ACCESS_TOKEN_SECRET,
-	  timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
-	})
-
+	var tokens = T.getAuth();
+	tokens.access_token = userAccessToken ? userAccessToken : AppConstants.ACCESS_TOKEN;
+	tokens.access_token_secret = userAccessTokenSecret ? userAccessTokenSecret : AppConstants.ACCESS_TOKEN_SECRET;
+	T.setAuth(tokens);
 	T.get('search/tweets', { q: req.query.q, count: 10 }, function(err, data, response) {
 	  res.send({response: data})
 	})
+});
 
+
+//-----------------------------------------
+// GET statuses/home_timeline
+//-----------------------------------------
+router.get('/home_timeline', (req, res) => {
+	var userAccessToken = req.query.accessToken;
+	var userAccessTokenSecret = req.query.accessTokenSecret;
+	var tokens = T.getAuth();
+	tokens.access_token = userAccessToken;
+	tokens.access_token_secret = userAccessTokenSecret;
+	T.setAuth(tokens);
+	T.get('statuses/home_timeline', function(err, data, response) {
+	  res.json({response: data})
+	})
 });
 
 

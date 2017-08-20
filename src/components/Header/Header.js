@@ -5,12 +5,25 @@ import s from './Header.css';
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem, Button} from 'react-bootstrap';
 import AppConstants from '../../constants/AppConstants';
 import Session from '../../core/Session';
+import history from '../../history';
 
 class Header extends React.Component {
 
   constructor(props) {
     super(props);
     this._signInTwitter = this._signInTwitter.bind(this);
+  }
+
+  _goToHomeTimeline() {
+    history.push('/');
+  }
+
+  _goToUserTimeline() {
+    history.push('/profile');
+  }
+
+  _goToSearchTimeline() {
+    // history.push('/search');
   }
 
   _signInTwitter() {
@@ -30,8 +43,8 @@ class Header extends React.Component {
           <Navbar.Collapse>
             { Session.getAccessToken() && Session.getAccessTokenSecret() &&
                 <Nav>
-                  <NavItem>Home</NavItem>
-                  <NavItem>Profile</NavItem>
+                  <NavItem onClick={this._goToHomeTimeline.bind(this)}>Home</NavItem>
+                  <NavItem onClick={this._goToUserTimeline.bind(this)}>Profile</NavItem>
                 </Nav>
             }
             <Navbar.Form pullRight>

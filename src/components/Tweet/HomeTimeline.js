@@ -36,14 +36,19 @@ class HomeTimeline extends React.Component {
     request.get('api/twitter/home_timeline')
            .query({accessToken: Session.getAccessToken(), accessTokenSecret: Session.getAccessTokenSecret()})
            .end(function(err,res){
+              var tweetDiv = [];
               if(res) {
-                var tweets = res.body.response;
-                console.log('res ',res);
-                var tweetDiv = [];
-                tweets.forEach((tweet,index)=>(
-                    tweetDiv.push(<Tweet data={tweet} key={index}/>)
-                ))
-                self.setState({tweetDiv: tweetDiv});
+                if(res.body.response && res.body.response.length > 0 && !res.body.response.errors) {
+                  var tweets = res.body.response;
+                  tweets.forEach((tweet,index)=>(
+                      tweetDiv.push(<Tweet data={tweet} key={index}/>)
+                  ))
+                  self.setState({tweetDiv: tweetDiv});
+                } else {
+                  tweetDiv.push(<span>Rate limit exceeded</span>);
+                  self.setState({tweetDiv: tweetDiv});
+                }
+                
               }
     });
   }

@@ -19,6 +19,7 @@ import {Row,Col,FormGroup,FormControl,ControlLabel,Button,Glyphicon} from 'react
 import Session from '../../core/Session';
 import HomeTimeline from '../../components/Tweet/HomeTimeline';
 import SearchTimeline from '../../components/Tweet/SearchTimeline';
+import UserInfo from '../../components/Profile/UserInfo';
 
 class Home extends React.Component {
   static propTypes = {
@@ -66,7 +67,14 @@ class Home extends React.Component {
         <div className={s.container}>
 
          { this.state.showHomeTimeline ?
-           <HomeTimeline />
+            <Row>
+              <Col sm={4}>
+                <UserInfo />
+              </Col>
+              <Col sm={8}>
+                <HomeTimeline />
+              </Col>
+            </Row>
            :
           this.state.searchTimelineDiv       
          }

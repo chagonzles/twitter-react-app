@@ -29,3 +29,19 @@
 .userName {
 	text-align: center;
 }
+
+.userStats {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 10px;
+}
+
+.statName {
+    font-weight: 600;
+    color: #657786;
+}
+
+.statValue {
+    font-size: 1.5em;
+    color: #1DA1F2;
+}

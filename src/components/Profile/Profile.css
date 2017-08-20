@@ -43,3 +43,15 @@
     font-size: 1.5em;
     color: #1DA1F2;
 }
+
+.noThumbnail {
+    width: 50%;
+    border-radius: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #ccc;
+    height: 150px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -38,7 +38,7 @@ class UserInfo extends React.Component {
     return (
       <div className={s.userInfoContainer}>
         <div className={s.thumbnailContainer}>
-          <Image className={s.thumbnail} src={profileImage}/>
+          <Image className={s.thumbnail} src={profileImage} circle responsive/>
         </div>
         
         <div className={s.fullName}>{name}</div>

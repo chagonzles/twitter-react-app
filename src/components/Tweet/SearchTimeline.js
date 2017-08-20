@@ -21,7 +21,7 @@ import spinner from './spinner.gif';
 
 class SearchTimeline extends React.Component {
   static propTypes = {
-      query: PropTypes.string.isRequired
+      // query: PropTypes.string.isRequired
   };
 
   constructor(props) {

@@ -48,6 +48,10 @@ const routes = {
       load: () => import(/* webpackChunkName: 'admin' */ './profile'),
     },
     {
+      path: '/search',
+      load: () => import(/* webpackChunkName: 'admin' */ './search'),
+    },
+    {
       path: '/auth/:accessToken/:accessTokenSecret',
       load: () => import(/* webpackChunkName: 'admin' */ './auth'),
     },

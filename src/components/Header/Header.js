@@ -23,7 +23,7 @@ class Header extends React.Component {
   }
 
   _goToSearchTimeline() {
-    // history.push('/search');
+    history.push('/search');
   }
 
   _signInTwitter() {
@@ -45,6 +45,7 @@ class Header extends React.Component {
                 <Nav>
                   <NavItem onClick={this._goToHomeTimeline.bind(this)}>Home</NavItem>
                   <NavItem onClick={this._goToUserTimeline.bind(this)}>Profile</NavItem>
+                  <NavItem onClick={this._goToSearchTimeline.bind(this)}>Search</NavItem>
                 </Nav>
             }
             <Navbar.Form pullRight>

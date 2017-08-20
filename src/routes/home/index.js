@@ -11,7 +11,7 @@ import React from 'react';
 import Home from './Home';
 import Layout from '../../components/Layout';
 
-const title = 'Twitter App';
+const title = 'Home';
 
 function action() {
   return {

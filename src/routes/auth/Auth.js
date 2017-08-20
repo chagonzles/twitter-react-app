@@ -24,12 +24,8 @@ class Auth extends React.Component {
   }
 
   componentDidMount() {
-    console.log('props!', this.props);
-    Session.setUser('charrr');
     Session.setAccessToken(this.props.accessToken);
     Session.setAccessTokenSecret(this.props.accessTokenSecret);
-
-    console.log('Session!!', Session.getAccessToken());
     history.replace('/');
   }
 

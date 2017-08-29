@@ -23,6 +23,7 @@ class UserInfo extends React.Component {
               if(res) {
                 var user = res.body.response;
                 self.setState({user: user});
+                console.log('user ',user);
               }
     });
   }
@@ -37,14 +38,7 @@ class UserInfo extends React.Component {
     }
     return (
       <div className={s.userInfoContainer}>
-        <div className={s.thumbnailContainer}>
-          { profileImage ?
-            <Image className={s.thumbnail} src={profileImage} circle responsive/>
-            :
-            <Image className={s.noThumbnail}/>
-          }
-        </div>
-        
+        <Image className={s.thumbnail} src={profileImage} circle responsive/>
         <div className={s.fullName}>{name}</div>
         <div className={s.userName}>{screenName ? '@' +screenName : ''}</div>
         <Row className={s.userStats}> 

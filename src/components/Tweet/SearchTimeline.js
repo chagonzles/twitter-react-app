@@ -49,11 +49,16 @@ class SearchTimeline extends React.Component {
               if(res) {
                 var tweets = res.body.response.statuses;
                 var tweetDiv = [];
-                tweets.forEach((tweet,index)=>(
-                    tweetDiv.push(<Tweet data={tweet} key={index}/>)
-                ))
-                self.setState({tweetDiv: tweetDiv});
-                console.log('tweets ', tweetDiv);
+                if(tweets != undefined && tweets != null) {
+                  tweets.forEach((tweet,index)=>(
+                      tweetDiv.push(<Tweet data={tweet} key={index}/>)
+                  ))
+                  self.setState({tweetDiv: tweetDiv});
+                  console.log('tweets ', tweetDiv);
+                } else {
+                  alert('Sorry but you exceed the api call')
+                }
+                
               }
     });
   }
